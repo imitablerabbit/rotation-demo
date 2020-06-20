@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.js"></script>
+        <script src="js/rotation.js"></script>
+    </head>
+
+    <body>
+        <div class="wrapper container px-4">
+
+            <div class="row gx-4">
+                <div class="p-2">
+                    <h1>Rotation Demo</h1>
+                </div>
+            </div>
+
+            <div class="row gx-4">
+                <div id="sidebar" class="col p-2">
+                    <div class="border border-secondary p-4">
+                        <h2>Options</h2>
+
+                        <br>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="rotate-check" checked>
+                            <label class="form-check-label" for="rotate-check">
+                                Should Rotate
+                            </label>
+                        </div>
+
+                        <br>
+
+                        <label for="rotate-angle" class="form-label" id="rotate-angle-label">Rotation Angle:</label>
+                        <input type="range" class="form-range" min="1" max="90" step="1" value="1" id="rotate-angle">
+                    </div>
+                </div>
+
+                <div id="canvas-wrapper" class="col-8 p-2">
+                    <div class="border border-secondary">
+                        <canvas id="rotation-canvas" width=500 height=500 \>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </body>
+</html>
