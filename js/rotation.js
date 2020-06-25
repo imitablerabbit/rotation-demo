@@ -15,9 +15,39 @@ var squarePos = [ 300, 300 ];
 // or be below 0.
 var squareRot = 0;
 
+// The circle mesh that is generated and drawn each frame.
+var circleMesh = null;
+
+// The position of the circle in world space.
+var circlePos = [ 100, 300 ];
+
+// The rotation value of the circle.
+var circleRot = 0;
+
+// Generates a circle mesh in the same structure as the square mesh. This
+// function takes in the radius and the number if samples to construct the
+// mesh with.
+function generateCircle(radius, samples) {
+    var angle = 360/samples;
+    var angleRad = toRadians(angle);
+    var mesh = [];
+    for (var i = 0; i < samples; i++) {
+        var coord = [ 0, 0 ];
+        coord[0] = Math.sin(angleRad * i) * radius;
+        coord[1] = Math.cos(angleRad * i) * radius;
+        mesh.push(coord);
+    }
+    return mesh;
+}
+
 // Create a duplicate of the mesh.
 function cloneMesh(mesh) {
     return JSON.parse(JSON.stringify(mesh));
+}
+
+// Convert degress to radians.
+function toRadians(angle) {
+    return (angle * Math.PI) / 180;
 }
 
 // Convert the local mesh vertices into world space coordinates. This function
@@ -36,7 +66,7 @@ function toWorldSpace(mesh, pos) {
 // in degress not radians. Returns a new rotated set of mesh vertices.
 function rotate(mesh, angle) {
     var dup = cloneMesh(mesh);
-    var radAngle = (angle * Math.PI) / 180;
+    var radAngle = toRadians(angle);
     
     for (var vert of dup) {
         var newX = (vert[0] * Math.cos(radAngle)) - (vert[1] * Math.sin(radAngle));
@@ -76,15 +106,23 @@ $(document).ready(function() {
     });
     rotateAngleLabel.innerHTML = "Rotation Angle (" + rotateAngleRange.value + "):";
 
+    circleMesh = generateCircle(50, 30);
+    console.log(circleMesh);
+
     setInterval(function() {
         canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
         if (shouldRotateCheck.checked) {
             squareRot += Number(rotateAngleRange.value);
             if (squareRot >= 360)
                 squareRot -= 360;
+            circleRot += Number(rotateAngleRange.value);
+            if (circleRot >= 360)
+                circleRot -= 360;
         }
-        var rotatedMesh = rotate(squareMesh, squareRot);
-        renderMesh(canvasCtx, toWorldSpace(rotatedMesh, squarePos));
+        var rotatedSquareMesh = rotate(squareMesh, squareRot);
+        var rotatedCircleMesh = rotate(circleMesh, circleRot);
+        renderMesh(canvasCtx, toWorldSpace(rotatedSquareMesh, squarePos));
+        renderMesh(canvasCtx, toWorldSpace(rotatedCircleMesh, circlePos));
     }, 1000/60);
 });
 
